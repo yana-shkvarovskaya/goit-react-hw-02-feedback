@@ -1,32 +1,32 @@
-import PropTypes from 'prop-types';
-import Statistics from './StatisticsItem';
-import s from './Statistics.module.css';
+import React from "react";
+import PropTypes from "prop-types";
 
-function StatisticsList({ title, stats }) {
+const Statistics = ({
+  good,
+  neutral,
+  bad,
+  totalFeedbacks,
+  positiveFeedbacksShare,
+}) => {
   return (
-    <section className={s.statistics}>
-      {title && <h2 className={s.title}>{title}</h2>}
-      <ul className={s.statList}>
-        {stats.map(stat => (
-          <Statistics
-            key={stat.id}
-            label={stat.label}
-            percentage={stat.percentage}
-          />
-        ))}
-      </ul>
-    </section>
+    <ul className="Statistics__list">
+      <li className="Statistics__item">Good:{good}</li>
+      <li className="Statistics__item">Neutral:{neutral}</li>
+      <li className="Statistics__item">Bad:{bad}</li>
+      <li className="Statistics__item">Total:{totalFeedbacks}</li>
+      <li className="Statistics__item">
+        Positive feedbacks: {positiveFeedbacksShare}%
+      </li>
+    </ul>
   );
-}
-
-StatisticsList.propTypes = {
-  stats: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      percentage: PropTypes.number.isRequired,
-    }),
-  ),
 };
 
-export default StatisticsList;
+Statistics.propTypes = {
+  good: PropTypes.number,
+  neutral: PropTypes.number,
+  bad: PropTypes.number,
+  totalFeedbacks: PropTypes.number,
+  positiveFeedbacksShare: PropTypes.number,
+};
+
+export default Statistics;

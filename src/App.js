@@ -1,29 +1,58 @@
+import React, { Component } from "react";
 import "index.css";
-import user from "user.json";
-import UserProfile from "components/UserProfile/UserProfile";
-import data from "data.json";
 import Statistics from "components/Statistics/Statistics";
-import friends from "friends.json";
-import FriendList from "components/FriendList/FriendList";
-import transactions from "transactions.json";
-import TransactionHistory from "components/TransactionHistory/TransactionHistory";
+import FeedbackOptions from "components/FeedbackOptions/FeedbackOptions";
+import Section from "components/Section/Section";
+import NoFeedback from "components/NoFeedback/NoFeedback";
 
-export default function App() {
-  return (
-    <div>
-      <UserProfile
-        username={user.username}
-        tag={user.tag}
-        location={user.location}
-        avatar={user.avatar}
-        stats={user.stats}
-        followers={user.stats.followers}
-        views={user.stats.views}
-        likes={user.stats.likes}
-      />
-      <Statistics title="Upload stats" stats={data} />
-      <FriendList friends={friends} />
-      <TransactionHistory items={transactions} />
-    </div>
-  );
+class App extends Component {
+  state = {
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  };
+
+  handleIncrement = (option) => {
+    this.setState((prevState) => ({ [option]: prevState[option] + 1 }));
+  };
+
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    return good + neutral + bad;
+  };
+
+  countPositiveFeedbackPercentage = () => {
+    return this.countTotalFeedback()
+      ? Math.round((this.state.good * 100) / this.countTotalFeedback())
+      : 0;
+  };
+
+  render() {
+    const { good, neutral, bad } = this.state;
+    const keys = Object.keys(this.state);
+
+    return (
+      <div>
+        <Section title={"Please leave feedback"} />
+        <FeedbackOptions
+          options={keys}
+          onLeaveFeedback={this.handleIncrement}
+        />
+        <Section title={"Statistics"} />
+        {this.countTotalFeedback() === 0 ? (
+          <NoFeedback message="There is no feedback" />
+        ) : (
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            totalFeedbacks={this.countTotalFeedback()}
+            positiveFeedbacksShare={this.countPositiveFeedbackPercentage()}
+          />
+        )}
+      </div>
+    );
+  }
 }
+
+export default App;
