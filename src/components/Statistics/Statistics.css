@@ -1,0 +1,11 @@
+.Statistics__list{
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin-left: 50px;
+}
+
+.Statistics__item{
+    margin-bottom: 5px;
+}
+
